@@ -1,17 +1,11 @@
-//Ideas:
-//maybe grab wiki image from relevant wikipedia page or tags
-//make it so that after 10 times running the div creation function a big black div covers whole screen with a smaller div in the center to try again
-
-// To get a API key
-const API_KEY = API KEY;
-const url = "https://api.openai.com/v1/completions";
-let options = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-};
+const serverUrl = 'http://localhost:3000/getCompletion'; //change localhost to your server IP if otherwise
+//let options = {
+//  method: "POST",
+//  headers: {
+//    "Content-Type": "application/json",
+//    Authorization: `Bearer ${API_KEY}`,
+//  },
+//};
 let myButton,
   myButtons2,
   adjInput,
@@ -146,68 +140,52 @@ function getText() {
     return;
   }
 
-  options.body = JSON.stringify({
-    model: "text-davinci-003",
-    prompt:
-      "Write an" +
-      adjInputValue +
-      "ad that is less than 20 words long for a" +
-      industryInputValue +
-      "product about" +
-      topicInputValue +
-      "s run by " +
-      comp +
-      " aimed at" +
-      roleInputValue +
-      " lovers",
-    temperature: 0.5,
-    max_tokens: 100,
-    top_p: 1.0,
-    frequency_penalty: 0.0,
-    presence_penalty: 0.0,
-  });
+  const prompt = `Write an ${adjInputValue} ad that is less than 20 words long for a ${industryInputValue} product about ${topicInputValue} run by ${comp} aimed at ${roleInputValue} lovers`;
 
-  fetch(url, options)
-    .then((response) => {
-      console.log("response", response);
-      const res = response.json();
-      res.then((data) => {
-        myOutputText = data.choices[0].text;
+  fetch(serverUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ prompt }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      myOutputText = data.output;
 
-        let newDiv = createElement("div", myOutputText);
-        newDiv.position(
-          myOutputDiv.x,
-          myOutputDiv.y + myOutputDivCount * myOutputDiv.height
-        );
-        newDiv.style("background-color", "#f2f2f2");
-        newDiv.style("padding", "10px");
-        newDiv.style("border-style", "solid");
-        newDiv.style("border-width", "3px");
-        newDiv.style("border-radius", "15px");
-        newDiv.style("border-color", "red");
-        newDiv.style("z-index", "2");
-        newDiv.style("padding", "20px");
-        newDiv.position(
-          random(0, windowWidth - windowWidth / 2.6),
-          random(0, windowHeight - 303)
-        );
-        newDiv.class("nd");
-  childDiv = createElement("div", "X");
+      let newDiv = createElement("div", myOutputText);
+      newDiv.position(
+        myOutputDiv.x,
+        myOutputDiv.y + myOutputDivCount * myOutputDiv.height
+      );
+      newDiv.style("background-color", "#f2f2f2");
+      newDiv.style("padding", "10px");
+      newDiv.style("border-style", "solid");
+      newDiv.style("border-width", "3px");
+      newDiv.style("border-radius", "15px");
+      newDiv.style("border-color", "red");
+      newDiv.style("z-index", "2");
+      newDiv.style("padding", "20px");
+      newDiv.position(
+        random(0, windowWidth - windowWidth / 2.6),
+        random(0, windowHeight - 303)
+      );
+      newDiv.class("nd");
+      childDiv = createElement("div", "X");
 
-        childDiv.parent(newDiv);
-        childDiv.style("border-top-right-radius", "5px");
-        childDiv.style("border-bottom-left-radius", "6px");
-        childDiv.style("background-color", "red");
-        childDiv.style("position", "absolute");
-        childDiv.style("top", "0");
-        childDiv.style("right", "0");
-        childDiv.size(30);
-        childDiv.style("z-index", "1");
-        childDiv.mousePressed(getText);
+      childDiv.parent(newDiv);
+      childDiv.style("border-top-right-radius", "5px");
+      childDiv.style("border-bottom-left-radius", "6px");
+      childDiv.style("background-color", "red");
+      childDiv.style("position", "absolute");
+      childDiv.style("top", "0");
+      childDiv.style("right", "0");
+      childDiv.size(30);
+      childDiv.style("z-index", "1");
+      childDiv.mousePressed(getText);
 
-        myOutputDivCount++;
-        myOutputDivs.push(newDiv);
-      });
+      myOutputDivCount++;
+      myOutputDivs.push(newDiv);
     })
     .catch((err) => console.log(err));
 }
