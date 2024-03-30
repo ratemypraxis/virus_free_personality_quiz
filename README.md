@@ -1,7 +1,7 @@
 # Virus-Free Personality Quiz
 ***a javascript quiz that gives you insight into your future with just a few simple questions ~ no risk!***
 
-![screengrab gif showing hyperspecific popups appear on a webpage for a personality quiz](https://cdn.discordapp.com/attachments/1083420545246306365/1189463193479819304/og.gif?ex=659e40ec&is=658bcbec&hm=95d651ae997ab5bec4485c78798f2d330eafbc84a510f6186b7fcdc200dd654b&)
+![screengrab gif showing hyperspecific popups appear on a webpage for a personality quiz](https://www.2nd.systems/images/virus.gif)
 
 ## How was it made?
 - p5.js for front-end, mainly following [this template by Yining Shi](https://editor.p5js.org/yining/sketches/cnlmIOoL9)
